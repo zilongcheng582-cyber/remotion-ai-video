@@ -1,6 +1,4 @@
 import { useCallback, useMemo, useState } from "react";
-import { z } from "zod";
-import { MotionDemoProps } from "../../types/constants";
 import { SSEMessage } from "../../types/schema";
 
 export type State =
@@ -25,7 +23,7 @@ export type State =
 
 export const useRendering = (
   id: string,
-  inputProps: z.infer<typeof MotionDemoProps>,
+  inputProps: Record<string, unknown>,
 ) => {
   const [state, setState] = useState<State>({
     status: "init",

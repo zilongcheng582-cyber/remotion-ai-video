@@ -1,5 +1,7 @@
 import { z } from "zod";
 import {
+  LAST_SPIN_NAME,
+  LastSpinProps,
   MOTION_DEMO_NAME,
   MotionDemoProps,
   MY_COMP_NAME,
@@ -9,6 +11,7 @@ import {
 export const RenderRequest = z.discriminatedUnion("id", [
   z.object({ id: z.literal(MOTION_DEMO_NAME), inputProps: MotionDemoProps }),
   z.object({ id: z.literal(MY_COMP_NAME), inputProps: MyCompProps }),
+  z.object({ id: z.literal(LAST_SPIN_NAME), inputProps: LastSpinProps }),
 ]);
 
 export type RenderResponse =
