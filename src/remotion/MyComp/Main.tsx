@@ -7,7 +7,7 @@ import {
   useVideoConfig,
 } from "remotion";
 import { z } from "zod";
-import { CompositionProps } from "../../../types/constants";
+import { MyCompProps } from "../../../types/constants";
 import { NextLogo } from "./NextLogo";
 import { Rings } from "./Rings";
 import { TextFade } from "./TextFade";
@@ -16,7 +16,7 @@ loadFont("normal", {
   subsets: ["latin"],
   weights: ["400", "700"],
 });
-export const Main = ({ title }: z.infer<typeof CompositionProps>) => {
+export const Main = ({ title }: z.infer<typeof MyCompProps>) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 

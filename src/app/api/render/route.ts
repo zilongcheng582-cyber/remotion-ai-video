@@ -2,10 +2,11 @@ import {
   addBundleToSandbox,
   createSandbox,
   renderMediaOnVercel,
-  uploadToVercelBlob,
 } from "@remotion/vercel";
+import { put } from "@vercel/blob";
 import { waitUntil } from "@vercel/functions";
-import { COMP_NAME } from "../../../../types/constants";
+import { randomUUID } from "node:crypto";
+import { resolveBlobAuth } from "./blob-auth";
 import { RenderRequest } from "../../../../types/schema";
 import {
   bundleRemotionProject,
@@ -19,12 +20,8 @@ export async function POST(req: Request) {
   const stream = new TransformStream();
   const writer = stream.writable.getWriter();
 
-  const blobToken = process.env.BLOB_READ_WRITE_TOKEN;
-  if (!blobToken) {
-    throw new Error(
-      'BLOB_READ_WRITE_TOKEN is not set. To fix this, go to vercel.com, log in, select Storage, click "Create Database", select "Blob", link it to your project, then add BLOB_READ_WRITE_TOKEN to your .env file.',
-    );
-  }
+  // Throws a clear error if neither OIDC (BLOB_STORE_ID) nor a legacy token is configured.
+  const blobAuth = resolveBlobAuth();
 
   const payload = await req.json();
   const body = RenderRequest.parse(payload);
@@ -56,7 +53,7 @@ export async function POST(req: Request) {
 
       const { sandboxFilePath, contentType } = await renderMediaOnVercel({
         sandbox,
-        compositionId: COMP_NAME,
+        compositionId: body.id,
         inputProps: body.inputProps,
         onProgress: async (update) => {
           switch (update.stage) {
@@ -93,13 +90,26 @@ export async function POST(req: Request) {
         progress: 1,
       });
 
-      const { url, size } = await uploadToVercelBlob({
-        sandbox,
-        sandboxFilePath,
-        contentType,
-        blobToken,
-        access: "public",
-      });
+      // @remotion/vercel's uploadToVercelBlob() uploads from inside the sandbox and
+      // requires a legacy BLOB_READ_WRITE_TOKEN. To support OIDC, read the MP4 out of
+      // the sandbox and upload it with the official SDK from this server function.
+      const video = await sandbox.readFileToBuffer({ path: sandboxFilePath });
+      if (!video) {
+        throw new Error(
+          `Rendered file not found in sandbox: ${sandboxFilePath}`,
+        );
+      }
+
+      const { downloadUrl: url } = await put(
+        `renders/${randomUUID()}.mp4`,
+        video,
+        {
+          access: "public",
+          contentType,
+          ...blobAuth.options,
+        },
+      );
+      const size = video.byteLength;
 
       await send({ type: "done", url, size });
     } catch (err) {

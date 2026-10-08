@@ -1,10 +1,15 @@
 import { z } from "zod";
-import { CompositionProps } from "./constants";
+import {
+  MOTION_DEMO_NAME,
+  MotionDemoProps,
+  MY_COMP_NAME,
+  MyCompProps,
+} from "./constants";
 
-export const RenderRequest = z.object({
-  id: z.string(),
-  inputProps: CompositionProps,
-});
+export const RenderRequest = z.discriminatedUnion("id", [
+  z.object({ id: z.literal(MOTION_DEMO_NAME), inputProps: MotionDemoProps }),
+  z.object({ id: z.literal(MY_COMP_NAME), inputProps: MyCompProps }),
+]);
 
 export type RenderResponse =
   | {
