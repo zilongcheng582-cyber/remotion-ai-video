@@ -2,12 +2,16 @@ import { Composition } from "remotion";
 import {
   COMP_NAME,
   defaultMyCompProps,
+  defaultMotionDemoProps,
   DURATION_IN_FRAMES,
+  MOTION_DEMO_DURATION_IN_FRAMES,
+  MOTION_DEMO_NAME,
   VIDEO_FPS,
   VIDEO_HEIGHT,
   VIDEO_WIDTH,
 } from "../../types/constants";
 import { Main } from "./MyComp/Main";
+import { MotionDemo } from "./MotionDemo/MotionDemo";
 import { NextLogo } from "./MyComp/NextLogo";
 
 export const RemotionRoot: React.FC = () => {
@@ -21,6 +25,15 @@ export const RemotionRoot: React.FC = () => {
         width={VIDEO_WIDTH}
         height={VIDEO_HEIGHT}
         defaultProps={defaultMyCompProps}
+      />
+      <Composition
+        id={MOTION_DEMO_NAME}
+        component={MotionDemo}
+        durationInFrames={MOTION_DEMO_DURATION_IN_FRAMES}
+        fps={VIDEO_FPS}
+        width={1920}
+        height={1080}
+        defaultProps={defaultMotionDemoProps}
       />
       <Composition
         id="NextLogo"
