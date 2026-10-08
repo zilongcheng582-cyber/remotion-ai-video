@@ -1,5 +1,3 @@
-import { z } from "zod";
-import { MOTION_DEMO_NAME, MotionDemoProps } from "../../types/constants";
 import { useRendering } from "../helpers/use-rendering";
 import { AlignEnd } from "./AlignEnd";
 import { Button } from "./Button";
@@ -11,16 +9,18 @@ import { ProgressBar } from "./ProgressBar";
 import { Spacing } from "./Spacing";
 
 export const RenderControls: React.FC<{
-  title: string;
-  setTitle: React.Dispatch<React.SetStateAction<string>>;
-  subtitle: string;
-  setSubtitle: React.Dispatch<React.SetStateAction<string>>;
-  inputProps: z.infer<typeof MotionDemoProps>;
-}> = ({ title, setTitle, subtitle, setSubtitle, inputProps }) => {
-  const { renderMedia, state, undo } = useRendering(
-    MOTION_DEMO_NAME,
-    inputProps,
-  );
+  compositionId: string;
+  inputProps: Record<string, unknown>;
+  // Title/subtitle fields are only shown for compositions that take them.
+  text?: {
+    title: string;
+    setTitle: React.Dispatch<React.SetStateAction<string>>;
+    subtitle: string;
+    setSubtitle: React.Dispatch<React.SetStateAction<string>>;
+  };
+  note?: string;
+}> = ({ compositionId, inputProps, text, note }) => {
+  const { renderMedia, state, undo } = useRendering(compositionId, inputProps);
 
   return (
     <InputContainer>
@@ -28,22 +28,29 @@ export const RenderControls: React.FC<{
       state.status === "invoking" ||
       state.status === "error" ? (
         <>
-          <div className="flex flex-col gap-4">
-            <Input
-              id="video-title"
-              label="Title"
-              disabled={state.status === "invoking"}
-              setText={setTitle}
-              text={title}
-            ></Input>
-            <Input
-              id="video-subtitle"
-              label="Subtitle"
-              disabled={state.status === "invoking"}
-              setText={setSubtitle}
-              text={subtitle}
-            ></Input>
-          </div>
+          {text ? (
+            <div className="flex flex-col gap-4">
+              <Input
+                id="video-title"
+                label="Title"
+                disabled={state.status === "invoking"}
+                setText={text.setTitle}
+                text={text.title}
+              ></Input>
+              <Input
+                id="video-subtitle"
+                label="Subtitle"
+                disabled={state.status === "invoking"}
+                setText={text.setSubtitle}
+                text={text.subtitle}
+              ></Input>
+            </div>
+          ) : null}
+          {note ? (
+            <div style={{ fontSize: 14, color: "#666", lineHeight: 1.5 }}>
+              {note}
+            </div>
+          ) : null}
           <AlignEnd className="mt-4">
             <Button
               disabled={state.status === "invoking"}
@@ -77,7 +84,7 @@ export const RenderControls: React.FC<{
                     visibility: state.subtitle ? "visible" : "hidden",
                   }}
                 >
-                  {state.subtitle ?? "\u00A0"}
+                  {state.subtitle ?? " "}
                 </div>
               </div>
               <ProgressBar progress={state.progress} />

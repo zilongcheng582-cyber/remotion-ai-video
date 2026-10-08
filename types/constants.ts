@@ -17,6 +17,17 @@ export const defaultMotionDemoProps: z.infer<typeof MotionDemoProps> = {
   subtitle: "Programmatic video with Remotion",
 };
 
+// --- LastSpin (Brawl Stars-inspired fan short, 28 s) ---
+export const LAST_SPIN_NAME = "LastSpin";
+export const LAST_SPIN_DURATION_IN_FRAMES = 840;
+export const LAST_SPIN_FPS = 30;
+export const LAST_SPIN_WIDTH = 1920;
+export const LAST_SPIN_HEIGHT = 1080;
+
+// The film is fully authored; it takes no editable input props.
+export const LastSpinProps = z.object({});
+export const defaultLastSpinProps: z.infer<typeof LastSpinProps> = {};
+
 // --- MyComp (original template composition, kept as a secondary composition) ---
 export const MY_COMP_NAME = "MyComp";
 
