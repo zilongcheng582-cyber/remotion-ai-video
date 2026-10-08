@@ -15,6 +15,9 @@ export default [
   {
     ignores: [
       "node_modules/**",
+      ".agents/**",
+      ".claude/**",
+      ".remotion/**",
       ".next/**",
       "out/**",
       "build/**",

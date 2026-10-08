@@ -1,11 +1,14 @@
 import { Composition } from "remotion";
 import {
-  COMP_NAME,
+  MY_COMP_NAME,
   defaultMyCompProps,
   defaultMotionDemoProps,
   DURATION_IN_FRAMES,
   MOTION_DEMO_DURATION_IN_FRAMES,
+  MOTION_DEMO_FPS,
+  MOTION_DEMO_HEIGHT,
   MOTION_DEMO_NAME,
+  MOTION_DEMO_WIDTH,
   VIDEO_FPS,
   VIDEO_HEIGHT,
   VIDEO_WIDTH,
@@ -18,7 +21,7 @@ export const RemotionRoot: React.FC = () => {
   return (
     <>
       <Composition
-        id={COMP_NAME}
+        id={MY_COMP_NAME}
         component={Main}
         durationInFrames={DURATION_IN_FRAMES}
         fps={VIDEO_FPS}
@@ -30,9 +33,9 @@ export const RemotionRoot: React.FC = () => {
         id={MOTION_DEMO_NAME}
         component={MotionDemo}
         durationInFrames={MOTION_DEMO_DURATION_IN_FRAMES}
-        fps={VIDEO_FPS}
-        width={1920}
-        height={1080}
+        fps={MOTION_DEMO_FPS}
+        width={MOTION_DEMO_WIDTH}
+        height={MOTION_DEMO_HEIGHT}
         defaultProps={defaultMotionDemoProps}
       />
       <Composition

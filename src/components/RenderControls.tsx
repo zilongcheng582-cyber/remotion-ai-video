@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { COMP_NAME, CompositionProps } from "../../types/constants";
+import { MOTION_DEMO_NAME, MotionDemoProps } from "../../types/constants";
 import { useRendering } from "../helpers/use-rendering";
 import { AlignEnd } from "./AlignEnd";
 import { Button } from "./Button";
@@ -11,11 +11,16 @@ import { ProgressBar } from "./ProgressBar";
 import { Spacing } from "./Spacing";
 
 export const RenderControls: React.FC<{
-  text: string;
-  setText: React.Dispatch<React.SetStateAction<string>>;
-  inputProps: z.infer<typeof CompositionProps>;
-}> = ({ text, setText, inputProps }) => {
-  const { renderMedia, state, undo } = useRendering(COMP_NAME, inputProps);
+  title: string;
+  setTitle: React.Dispatch<React.SetStateAction<string>>;
+  subtitle: string;
+  setSubtitle: React.Dispatch<React.SetStateAction<string>>;
+  inputProps: z.infer<typeof MotionDemoProps>;
+}> = ({ title, setTitle, subtitle, setSubtitle, inputProps }) => {
+  const { renderMedia, state, undo } = useRendering(
+    MOTION_DEMO_NAME,
+    inputProps,
+  );
 
   return (
     <InputContainer>
@@ -23,18 +28,29 @@ export const RenderControls: React.FC<{
       state.status === "invoking" ||
       state.status === "error" ? (
         <>
-          <Input
-            disabled={state.status === "invoking"}
-            setText={setText}
-            text={text}
-          ></Input>
+          <div className="flex flex-col gap-4">
+            <Input
+              id="video-title"
+              label="Title"
+              disabled={state.status === "invoking"}
+              setText={setTitle}
+              text={title}
+            ></Input>
+            <Input
+              id="video-subtitle"
+              label="Subtitle"
+              disabled={state.status === "invoking"}
+              setText={setSubtitle}
+              text={subtitle}
+            ></Input>
+          </div>
           <AlignEnd className="mt-4">
             <Button
               disabled={state.status === "invoking"}
               loading={state.status === "invoking"}
               onClick={renderMedia}
             >
-              Render video
+              Render Video
             </Button>
           </AlignEnd>
           {state.status === "invoking" ? (

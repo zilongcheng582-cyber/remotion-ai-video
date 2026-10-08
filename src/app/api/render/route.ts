@@ -5,7 +5,6 @@ import {
   uploadToVercelBlob,
 } from "@remotion/vercel";
 import { waitUntil } from "@vercel/functions";
-import { COMP_NAME } from "../../../../types/constants";
 import { RenderRequest } from "../../../../types/schema";
 import {
   bundleRemotionProject,
@@ -56,7 +55,7 @@ export async function POST(req: Request) {
 
       const { sandboxFilePath, contentType } = await renderMediaOnVercel({
         sandbox,
-        compositionId: COMP_NAME,
+        compositionId: body.id,
         inputProps: body.inputProps,
         onProgress: async (update) => {
           switch (update.stage) {

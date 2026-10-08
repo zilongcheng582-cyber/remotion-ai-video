@@ -29,9 +29,9 @@ export const DownloadButton: React.FC<{
         <UndoIcon></UndoIcon>
       </Button>
       <Spacing></Spacing>
-      <a href={state.url}>
+      <a href={state.url} download="motion-demo.mp4">
         <Button>
-          Download video
+          Download MP4
           <Spacing></Spacing>
           <Megabytes sizeInBytes={state.size}></Megabytes>
         </Button>
