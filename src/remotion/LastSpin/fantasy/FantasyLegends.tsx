@@ -148,7 +148,7 @@ const BeatLeap: React.FC<{ lf: number }> = ({ lf }) => {
   const S = 2.2;
   const t = clamp01(lf / 14);
   const x = 420 + t * 1000;
-  const y = 860 - Math.sin(t * Math.PI) * 520 + (t > 0.85 ? (t - 0.85) * 600 : 0);
+  const y = 880 - Math.sin(t * Math.PI) * 360 + (t > 0.85 ? (t - 0.85) * 400 : 0);
   const impact = lf >= 14 ? clamp01((lf - 14) / 6) : 0;
   return (
     <AbsoluteFill>
@@ -160,7 +160,7 @@ const BeatLeap: React.FC<{ lf: number }> = ({ lf }) => {
         {Array.from({ length: 10 }).map((_, i) => {
           const tt = clamp01(t - i * 0.035);
           const tx = 420 + tt * 1000;
-          const ty = 860 - Math.sin(tt * Math.PI) * 520 - 120;
+          const ty = 880 - Math.sin(tt * Math.PI) * 360 - 120;
           return <circle key={i} cx={tx} cy={ty} r={60 - i * 5} fill={i < 4 ? "#ffe14a" : "#ff6a2a"} opacity={(0.7 - i * 0.06) * (1 - impact)} />;
         })}
         {[0, 1, 2].map((i) => (
@@ -196,11 +196,11 @@ const BeatSunset: React.FC<{ lf: number }> = ({ lf }) => {
     [0, 740],
     [23, 790],
   ]);
-  const primoArms = blendArms(PRIMO_POSES.idle, { l: [44, 14, 54], r: [-30, 36, 150] }, raise);
-  const shellyHand: V3 = [-24 - raise * 10, 6 + raise * 34, 40 + raise * 112];
+  const primoArms = blendArms(PRIMO_POSES.idle, { l: [44, 14, 54], r: [-30, 62, 140] }, raise);
+  const shellyHand: V3 = [-24 - raise * 10, 6 + raise * 52, 40 + raise * 104];
   // place Shelly so their raised hands end ~20 px apart
-  const phEnd = localToScreen([-30, 36, 150], 180 - 105);
-  const shEnd = localToScreen([-34, 40, 152], 180 + 105);
+  const phEnd = localToScreen([-30, 62, 140], 180 - 105);
+  const shEnd = localToScreen([-34, 58, 144], 180 + 105);
   const xs = xp + phEnd[0] * S - shEnd[0] * S + 20 + (1 - raise) * 70;
   const sil = lerp(lf, [6, 16], [1, 0.45]);
   const ph = localToScreen(primoArms.r, 180 - 105 * turn);
